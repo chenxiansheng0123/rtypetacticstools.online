@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="beginner.title">Beginner's Guide — R-Type Tactics I • II Cosmos</title>
+    <meta name="description" content="New to R-Type Tactics? Learn the basics: movement, combat phases, resource management, UI translations, and how to build your first fleet.">
+    <link rel="canonical" href="https://rtypetactics.guide/beginner-guide.html">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #141420; --border: #1e1e30;
+            --accent: #00aaff; --accent-warm: #ff6b35; --success: #00e676;
+            --danger: #ff1744; --text: #e0e0e0; --text-dim: #8892b0; --link: #58a6ff;
+            --max-read: 750px; --max-wide: 1100px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh;
+        }
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); padding: 0 1rem;
+        }
+        .header-inner {
+            max-width: var(--max-wide); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 0.5rem;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.1rem; font-weight: 700; color: #fff; text-decoration: none; white-space: nowrap; }
+        .logo span { color: var(--accent); }
+        .nav { display: flex; gap: 0.25rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
+        .nav a { color: var(--text-dim); text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.875rem; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+        .nav a:hover, .nav a.active { color: #fff; background: rgba(255,255,255,0.06); }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; }
+        .page { max-width: var(--max-wide); margin: 0 auto; padding: 0 1rem 3rem; display: grid; grid-template-columns: 1fr 300px; gap: 2rem; }
+        .content { min-width: 0; }
+        .sidebar { position: sticky; top: 72px; align-self: start; }
+        .article { max-width: var(--max-read); }
+        .article h1 { font-size: 2rem; font-weight: 800; margin: 2rem 0 0.5rem; }
+        .article h2 { font-size: 1.35rem; font-weight: 700; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+        .article h3 { font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--accent); }
+        .article p { margin-bottom: 1rem; color: var(--text); }
+        .article ul, .article ol { margin: 0 0 1rem 1.5rem; }
+        .article li { margin-bottom: 0.4rem; }
+        .article a { color: var(--link); }
+        .article code { background: var(--surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+        .toc {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+            padding: 1.25rem; margin: 1.5rem 0; font-size: 0.9rem;
+        }
+        .toc h3 { margin: 0 0 0.75rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); }
+        .toc ol { margin: 0; padding-left: 1.25rem; }
+        .toc li { margin-bottom: 0.3rem; }
+        .toc a { color: var(--link); text-decoration: none; }
+        .tip-box {
+            background: rgba(0,170,255,0.08); border-left: 3px solid var(--accent);
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1.25rem 0;
+        }
+        .tip-box.warn { background: rgba(255,107,53,0.08); border-left-color: var(--accent-warm); }
+        .tip-box strong { display: block; margin-bottom: 0.25rem; }
+        .tip-box p { margin: 0; font-size: 0.9rem; }
+        .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+        .sidebar-card h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.75rem; }
+        .sidebar-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .sidebar-card li a { color: var(--link); text-decoration: none; font-size: 0.875rem; }
+        .ad-slot { background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; min-height: 90px; margin-bottom: 1.25rem; }
+        .ad-slot.sidebar-ad { min-height: 250px; }
+        .footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.8rem; }
+        .footer a { color: var(--link); text-decoration: none; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); margin: 1.5rem 0 0; }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        table th { text-align:left; padding:0.5rem; color:var(--text-dim); border-bottom:1px solid var(--border); }
+        table td { padding:0.5rem; border-bottom:1px solid var(--border); }
+        table tr:last-child td { border-bottom:none; }
+        @media (max-width: 768px) {
+            .page { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .nav { display: none; }
+            .nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); border-bottom: 1px solid var(--border); padding: 0.5rem 1rem 1rem; }
+            .hamburger { display: block; }
+            .article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <a href="/" class="logo">R-Type<span>Tactics</span>.guide</a>
+            <div data-lang-switcher></div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <nav>
+            <ul class="nav" id="nav">
+                <li><a href="beginner-guide.html" class="active" data-i18n="nav.beginner">Beginner's Guide</a></li>
+                <li><a href="units/" data-i18n="nav.units">Units</a></li>
+                <li><a href="walkthrough/" data-i18n="nav.walkthrough">Walkthrough</a></li>
+                <li><a href="tips.html" data-i18n="nav.tips">Tips</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="page">
+    <main class="content">
+        <article class="article">
+            <nav class="breadcrumb"><a href="/" data-i18n="breadcrumb.home">Home</a> / <span data-i18n="breadcrumb.beginner">Beginner's Guide</span></nav>
+            <h1 data-i18n="beginner.title">Absolute Beginner's Guide to R-Type Tactics</h1>
+            <p data-i18n="beginner.intro">R-Type Tactics flips the classic shoot-'em-up formula into a turn-based strategy game. You command a fleet of spacecraft on a hex grid, take turns moving and attacking, and can even jump into individual units for real-time shoot-'em-up sequences. This guide gets you from zero to competent in one read.</p>
+
+            <div class="toc">
+                <h3 data-i18n="beginner.toc">Table of Contents</h3>
+                <ol>
+                    <li><a href="#what-is" data-i18n="beginner.sec.what">What Is R-Type Tactics?</a></li>
+                    <li><a href="#game-modes" data-i18n="beginner.sec.modes">Game Modes & What to Play First</a></li>
+                    <li><a href="#controls" data-i18n="beginner.sec.controls">Controls & UI Walkthrough</a></li>
+                    <li><a href="#first-fleet" data-i18n="beginner.sec.fleet">Building Your First Fleet</a></li>
+                    <li><a href="#combat" data-i18n="beginner.sec.combat">Combat Basics</a></li>
+                    <li><a href="#resources" data-i18n="beginner.sec.resources">Resource Management</a></li>
+                    <li><a href="#force" data-i18n="beginner.sec.force">The Force System</a></li>
+                    <li><a href="#first-mission" data-i18n="beginner.sec.first5">Your First 5 Missions</a></li>
+                </ol>
+            </div>
+
+            <div class="ad-slot" data-i18n="ad.aftertoc">Ad — After TOC</div>
+
+            <h2 id="what-is" data-i18n="beginner.sec.what">What Is R-Type Tactics?</h2>
+            <p data-i18n data-i18n-html="true">R-Type Tactics is a <strong>turn-based strategy game</strong> set in the R-Type universe. You control a fleet of ships on a hex-based grid, issuing movement and attack commands each turn. Unlike traditional R-Type games where you pilot a single ship, here you manage an entire battlegroup.</p>
+            <p data-i18n="beginner.what.p2">The collection includes two full games:</p>
+            <ul>
+                <li><strong>R-Type Tactics I</strong> — The original campaign. Earth forces vs. the Bydo Empire. You play as Earth.</li>
+                <li><strong>R-Type Tactics II: Operation Bitter Chocolate</strong> — The sequel. Adds a full Bydo campaign where you play as the aliens, plus new units and branching story paths.</li>
+            </ul>
+            <p>The <em>Cosmos</em> re-release updates both games with HD visuals, rebalanced gameplay, and quality-of-life improvements over the original PSP versions.</p>
+
+            <div class="tip-box">
+                <strong>Key Difference from Other Strategy Games</strong>
+                <p data-i18n="beginner.pilot.tip">You can "zoom in" to control individual units in a side-scrolling shoot-'em-up mode during certain phases. This isn't just a gimmick — piloting skill can turn a losing battle around.</p>
+            </div>
+
+            <h2 id="game-modes" data-i18n="beginner.sec.modes">Game Modes & What to Play First</h2>
+            <p>If you're brand new to the series, here's the recommended order:</p>
+            <ol>
+                <li><strong>RTT I — Earth Campaign (Normal)</strong>. This is the tutorial in everything but name. It introduces mechanics gradually and gives you time to learn.</li>
+                <li><strong>RTT I — Hard Mode</strong>. Replay for better ranks and unlockables.</li>
+                <li><strong>RTT II — Earth Campaign</strong>. Builds on everything from RTT I with more complex missions.</li>
+                <li><strong>RTT II — Bydo Campaign</strong>. Completely different playstyle. Save this for when you know the mechanics cold.</li>
+            </ol>
+
+            <div class="tip-box warn">
+                <strong>Don't Start With the Bydo Campaign</strong>
+                <p data-i18n="beginner.bydo.warn">Bydo units play fundamentally differently — organic, self-repairing, asymmetrical. It's a fantastic experience but you'll be confused if you don't know the Earth side first.</p>
+            </div>
+
+            <h2 id="controls" data-i18n="beginner.sec.controls">Controls & UI Walkthrough</h2>
+            <h3>Main Screen Layout</h3>
+            <p>During a mission, the screen is divided into several key areas:</p>
+            <ul>
+                <li><strong>Hex Grid (center)</strong> — The main battlefield. Blue hexes are your movement range; red hexes are attack range.</li>
+                <li><strong>Unit Panel (bottom)</strong> — Shows selected unit stats: HP, EN (energy), fuel, weapon loadout.</li>
+                <li><strong>Turn Order (side)</strong> — Initiative queue showing which units move next. Critical for planning.</li>
+                <li><strong>Minimap (corner)</strong> — Full battlefield overview. Toggle with Select/Back.</li>
+                <li><strong>Resource Counter (top)</strong> — Current Solonium (currency) and Force Points.</li>
+            </ul>
+
+            <h3>Basic Controls</h3>
+            <table>
+                <tr><th>Action</th><th>Controller</th><th>Keyboard (Steam)</th></tr>
+                <tr><td>Move cursor</td><td>D-Pad / L-Stick</td><td>Arrow Keys / WASD</td></tr>
+                <tr><td>Select unit</td><td>A / Cross</td><td>Enter / Left Click</td></tr>
+                <tr><td>Confirm action</td><td>A / Cross</td><td>Enter / Left Click</td></tr>
+                <tr><td>Cancel / Back</td><td>B / Circle</td><td>Esc / Right Click</td></tr>
+                <tr><td>End turn</td><td>Start / Options</td><td>Tab</td></tr>
+                <tr><td>Zoom in/out</td><td>L1 / R1</td><td>Mouse Wheel</td></tr>
+                <tr><td>Toggle minimap</td><td>Select</td><td>M</td></tr>
+                <tr><td>Pilot mode</td><td>Y / Triangle</td><td>Space</td></tr>
+            </table>
+
+            <h2 id="first-fleet" data-i18n="beginner.sec.fleet">Building Your First Fleet</h2>
+            <p>Before each mission, you deploy units onto the map within a deployment zone. Each unit costs a certain number of <strong>deployment points</strong>, and you have a cap per mission.</p>
+
+            <h3>Recommended Starter Fleet (Earth — RTT I)</h3>
+            <ul>
+                <li><strong>R-9A Arrowhead</strong> (x2) — Your bread-and-butter fighter. Balanced stats, reliable Force weapon. Deploy at least two.</li>
+                <li><strong>R-9D Shooting Star</strong> (x1) — Longer range, slightly frailer. Good for fire support behind the Arrowheads.</li>
+                <li><strong>Repair Unit</strong> (x1) — Heals adjacent units. Keep it behind your front line. New players always skip this. Don't.</li>
+                <li><strong>Transport Ship</strong> (x1) — Carries units across the map faster. Load your slowest unit onto it for rapid deployment.</li>
+            </ul>
+
+            <div class="tip-box">
+                <strong>The 2-1-1 Rule</strong>
+                <p>Two fighters, one long-range support, one utility (repair or transport). This composition works for ~80% of RTT I missions. Adjust only when a mission specifically demands it.</p>
+            </div>
+
+            <h2 id="combat" data-i18n="beginner.sec.combat">Combat Basics</h2>
+            <h3>Turn Structure</h3>
+            <p>Each turn has three phases:</p>
+            <ol>
+                <li><strong>Deployment Phase</strong> — Place new units from reserves (only on certain turns).</li>
+                <li><strong>Action Phase</strong> — Move and attack with each unit. Order is determined by unit speed + initiative.</li>
+                <li><strong>End Phase</strong> — Status effects tick, objectives check, resources regenerate.</li>
+            </ol>
+
+            <h3>Movement</h3>
+            <p>Each unit has a movement range displayed in blue hexes. Terrain affects movement cost — open space costs 1 per hex; asteroid fields cost 2. You can move and then attack (but not attack then move, unless the unit has the "Hit & Run" trait).</p>
+
+            <h3>Attacking</h3>
+            <p>Each weapon on a unit has:</p>
+            <ul>
+                <li><strong>Range</strong> — Shown in red hexes. Some weapons are directional (forward arc only).</li>
+                <li><strong>Damage</strong> — Modified by target armor type and range fall-off.</li>
+                <li><strong>EN Cost</strong> — Energy consumed per shot. If EN is zero, the weapon can't fire.</li>
+                <li><strong>Ammo</strong> — Some weapons have limited shots per mission. Check before you commit.</li>
+            </ul>
+
+            <h3>Facing Matters</h3>
+            <p>Units have a facing direction. <strong>Side and rear attacks deal bonus damage.</strong> Always position to flank the enemy front line. The difference between a frontal hit and a rear hit can be 2× damage or more.</p>
+
+            <h2 id="resources" data-i18n="beginner.sec.resources">Resource Management</h2>
+            <p>You manage three resources during a mission:</p>
+            <ul>
+                <li><strong>Solonium</strong> — Earned by destroying enemies and capturing points. Used to call in reinforcements during deployment phases. Don't hoard it — a unit on the field now is worth more than a unit that deploys on turn 15.</li>
+                <li><strong>Energy (EN)</strong> — Per-unit resource consumed by weapons and special abilities. Recharges slightly each turn. Watch your EN gauge — an empty unit is dead weight.</li>
+                <li><strong>Fuel</strong> — Per-unit limit on total movement per mission (not per turn). Long-range units consume less per hex but have smaller tanks. If a unit runs out of fuel mid-mission, it's stranded.</li>
+            </ul>
+
+            <h2 id="force" data-i18n="beginner.sec.force">The Force System</h2>
+            <p>The <strong>Force</strong> is R-Type's signature mechanic. It's a detachable pod that can be:</p>
+            <ul>
+                <li><strong>Attached to the front</strong> — Absorbs damage and enhances your forward weapon.</li>
+                <li><strong>Attached to the rear</strong> — Covers your back. Useful when retreating.</li>
+                <li><strong>Detached</strong> — Acts as an independent drone, attacking enemies automatically.</li>
+            </ul>
+            <p>Mastering Force positioning is what separates good players from great ones. <strong>Detach your Force when you need to cover two angles at once. Reattach it when you need the damage shield.</strong></p>
+
+            <h2 id="first-mission" data-i18n="beginner.sec.first5">Your First 5 Missions</h2>
+            <p>Here's a spoiler-free preview of what the opening missions teach you:</p>
+            <ol>
+                <li><strong>Mission 1 — "First Contact"</strong>. Tutorial mission. Move forward, shoot Bydo scouts. Learn basic movement and attack.</li>
+                <li><strong>Mission 2 — "Asteroid Field"</strong>. Introduces terrain effects. Navigate through asteroids while engaging enemies.</li>
+                <li><strong>Mission 3 — "Defense Line"</strong>. First defensive mission. Hold position and protect a target. Teaches positioning.</li>
+                <li><strong>Mission 4 — "Carrier Strike"</strong>. First boss fight. Large Bydo warship with multiple target points. Learn to focus fire.</li>
+                <li><strong>Mission 5 — "Behind Enemy Lines"</strong>. First mission with fog of war and hidden objectives. Scout before committing.</li>
+            </ol>
+
+            <div class="tip-box warn">
+                <strong>Mission 4 Difficulty Spike</strong>
+                <p>The first boss is a wall for many new players. Bring at least one long-range unit (R-9D) and focus fire on one section at a time rather than spreading damage. The center core is the weak point — but it's also the most heavily defended.</p>
+            </div>
+
+        </article>
+
+        <div class="ad-slot" style="margin-top:2rem;" data-i18n="ad.below">Ad — Below Article</div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <h4 data-i18n="sidebar.sections">Article Sections</h4>
+            <ul>
+                <li><a href="#what-is" data-i18n="beginner.sec.what">→ What Is R-Type Tactics?</a></li>
+                <li><a href="#game-modes" data-i18n="beginner.sec.modes">→ Game Modes</a></li>
+                <li><a href="#controls" data-i18n="beginner.sec.controls">→ Controls & UI</a></li>
+                <li><a href="#first-fleet" data-i18n="beginner.sec.fleet">→ Building Your First Fleet</a></li>
+                <li><a href="#combat" data-i18n="beginner.sec.combat">→ Combat Basics</a></li>
+                <li><a href="#resources" data-i18n="beginner.sec.resources">→ Resource Management</a></li>
+                <li><a href="#force" data-i18n="beginner.sec.force">→ The Force System</a></li>
+                <li><a href="#first-mission" data-i18n="beginner.sec.first5">→ First 5 Missions</a></li>
+            </ul>
+        </div>
+        <div class="ad-slot sidebar-ad" data-i18n="ad.sidebar">Ad — Sidebar</div>
+    </aside>
+</div>
+
+<footer class="footer">
+    <p data-i18n="footer.copyright">R-Type Tactics I • II Cosmos is © Granzella Inc. / NIS America, Inc. Fan-made guide.</p>
+    <p style="margin-top:0.5rem"><a href="/" data-i18n="nav.home">Home</a> · <a href="mailto:hello@rtypetactics.guide" data-i18n="footer.contact">Contact</a></p>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script>
+    document.getElementById('hamburger').addEventListener('click', () => { document.getElementById('nav').classList.toggle('open'); });
+</script>
+</body>
+</html>

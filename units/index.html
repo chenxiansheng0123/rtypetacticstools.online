@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="units.title">Unit Database — R-Type Tactics I • II Cosmos</title>
+    <meta name="description" content="Complete unit database for R-Type Tactics I • II Cosmos. Earth Force and Bydo Empire ships with stats, costs, upgrade paths, and tactical advice.">
+    <link rel="canonical" href="https://rtypetactics.guide/units/">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #141420; --border: #1e1e30;
+            --accent: #00aaff; --accent-warm: #ff6b35; --success: #00e676;
+            --danger: #ff1744; --text: #e0e0e0; --text-dim: #8892b0; --link: #58a6ff;
+            --max-read: 750px; --max-wide: 1100px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh;
+        }
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); padding: 0 1rem;
+        }
+        .header-inner {
+            max-width: var(--max-wide); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 0.5rem;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.1rem; font-weight: 700; color: #fff; text-decoration: none; white-space: nowrap; }
+        .logo span { color: var(--accent); }
+        .nav { display: flex; gap: 0.25rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
+        .nav a { color: var(--text-dim); text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.875rem; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+        .nav a:hover, .nav a.active { color: #fff; background: rgba(255,255,255,0.06); }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; }
+        .page { max-width: var(--max-wide); margin: 0 auto; padding: 0 1rem 3rem; }
+        h1 { font-size: 2rem; font-weight: 800; margin: 2rem 0 0.5rem; }
+        .lead { color: var(--text-dim); max-width: 600px; margin-bottom: 1.5rem; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); margin: 1.5rem 0 0; }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+
+        .filter-bar {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+            padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border);
+            background: var(--bg); color: #fff; font-size: 0.875rem; outline: none;
+        }
+        .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent); }
+        .filter-bar input { flex: 1; min-width: 180px; }
+        .filter-bar input::placeholder { color: var(--text-dim); }
+        .filter-bar select { min-width: 140px; cursor: pointer; }
+
+        .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); }
+        .tab-btn {
+            padding: 0.6rem 1.5rem; border: none; background: none; color: var(--text-dim);
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; position: relative; bottom: -2px;
+            border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn:hover { color: #fff; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .unit-table {
+            width: 100%; border-collapse: collapse; font-size: 0.875rem;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+        }
+        .unit-table thead th {
+            text-align: left; padding: 0.75rem; background: rgba(255,255,255,0.03);
+            color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+            cursor: pointer; user-select: none; white-space: nowrap; border-bottom: 1px solid var(--border);
+        }
+        .unit-table thead th:hover { color: #fff; }
+        .unit-table thead th .sort-arrow { margin-left: 0.3rem; font-size: 0.7rem; }
+        .unit-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+        .unit-table tbody tr:last-child { border-bottom: none; }
+        .unit-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+        .unit-table tbody td { padding: 0.6rem 0.75rem; }
+        .unit-name { font-weight: 600; color: #fff; }
+        .unit-name a { color: #fff; text-decoration: none; }
+        .unit-name a:hover { color: var(--accent); }
+        .stat-hp { color: var(--success); }
+        .stat-en { color: var(--link); }
+        .stat-atk { color: var(--danger); }
+        .stat-def { color: var(--text-dim); }
+        .stat-mob { color: var(--accent); }
+        .faction-tag {
+            display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem;
+            border-radius: 999px; text-transform: uppercase;
+        }
+        .faction-tag.earth { background: rgba(0,170,255,0.15); color: var(--accent); }
+        .faction-tag.bydo { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
+        .tier-badge {
+            display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+        .tier-s { background: rgba(255,215,0,0.2); color: #ffd700; }
+        .tier-a { background: rgba(0,230,118,0.2); color: var(--success); }
+        .tier-b { background: rgba(88,166,255,0.2); color: var(--link); }
+        .tier-c { background: rgba(136,146,176,0.15); color: var(--text-dim); }
+        .no-results { text-align: center; padding: 3rem 1rem; color: var(--text-dim); }
+
+        .ad-slot { background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; min-height: 90px; margin: 2rem 0; }
+        .footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.8rem; }
+        .footer a { color: var(--link); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); border-bottom: 1px solid var(--border); padding: 0.5rem 1rem 1rem; }
+            .hamburger { display: block; }
+            .unit-table { font-size: 0.75rem; }
+            .unit-table thead th, .unit-table tbody td { padding: 0.4rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <a href="/" class="logo">R-Type<span>Tactics</span>.guide</a>
+            <div data-lang-switcher></div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <nav>
+            <ul class="nav" id="nav">
+                <li><a href="/beginner-guide.html" data-i18n="nav.beginner">Beginner's Guide</a></li>
+                <li><a href="/units/" class="active" data-i18n="nav.units">Units</a></li>
+                <li><a href="/walkthrough/" data-i18n="nav.walkthrough">Walkthrough</a></li>
+                <li><a href="/tips.html" data-i18n="nav.tips">Tips</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="page">
+    <nav class="breadcrumb"><a href="/" data-i18n="breadcrumb.home">Home</a> / <span data-i18n="breadcrumb.units">Units</span></nav>
+    <h1 data-i18n="units.title">Unit Database</h1>
+    <p class="lead" data-i18n="units.lead">Every playable unit in R-Type Tactics I & II Cosmos. Filter by faction, type, or tier. Click a unit name for detailed stats and tactical advice.</p>
+
+    <div class="filter-bar" id="filterBar"><!-- JS-rendered with i18n --></div>
+
+    <div class="tabs" id="factionTabs"><!-- JS-rendered --></div>
+
+    <div style="overflow-x:auto;">
+        <table class="unit-table" id="unitTable">
+            <thead id="unitHead"><!-- JS-rendered --></thead>
+            <tbody id="unitBody"><!-- JS-rendered --></tbody>
+        </table>
+    </div>
+
+    <div class="no-results" id="noResults" style="display:none;" data-i18n="units.noresults">No units match your filters.</div>
+
+    <div class="ad-slot" data-i18n="ad.belowlist">Ad — Below Unit Table</div>
+</div>
+
+<footer class="footer">
+    <p data-i18n="footer.copyright">R-Type Tactics I • II Cosmos is © Granzella Inc. / NIS America, Inc. Fan-made guide.</p>
+    <p style="margin-top:0.5rem"><a href="/" data-i18n="nav.home">Home</a> · <a href="mailto:hello@rtypetactics.guide" data-i18n="footer.contact">Contact</a></p>
+</footer>
+
+<script src="/js/i18n.js"></script>
+<script>
+    const units = [
+        { name:"R-9A Arrowhead",     faction:"earth", type:"fighter", hp:80,  en:60,  atk:45, def:30, mob:5, cost:200, tier:"A", slug:"r9a-arrowhead" },
+        { name:"R-9D Shooting Star", faction:"earth", type:"fighter", hp:65,  en:70,  atk:55, def:20, mob:6, cost:220, tier:"A", slug:"r9d-shooting-star" },
+        { name:"R-9F Andromalius",   faction:"earth", type:"fighter", hp:70,  en:55,  atk:60, def:25, mob:6, cost:250, tier:"B", slug:"r9f-andromalius" },
+        { name:"R-9W Wise Man",      faction:"earth", type:"fighter", hp:55,  en:80,  atk:40, def:20, mob:7, cost:200, tier:"B", slug:"r9w-wise-man" },
+        { name:"R-9Ø Ragnarok",      faction:"earth", type:"fighter", hp:100, en:90,  atk:75, def:40, mob:5, cost:400, tier:"S", slug:"r9o-ragnarok" },
+        { name:"R-9B Strider",       faction:"earth", type:"bomber",  hp:100, en:40,  atk:85, def:45, mob:3, cost:350, tier:"A", slug:"r9b-strider" },
+        { name:"R-9C Warhead",       faction:"earth", type:"bomber",  hp:85,  en:50,  atk:70, def:40, mob:4, cost:300, tier:"B", slug:"r9c-warhead" },
+        { name:"RX-10 Albatross",    faction:"earth", type:"bomber",  hp:120, en:35,  atk:90, def:50, mob:2, cost:450, tier:"A", slug:"rx10-albatross" },
+        { name:"Repair Unit",        faction:"earth", type:"support", hp:40,  en:50,  atk:5,  def:10, mob:4, cost:100, tier:"S", slug:"repair-unit" },
+        { name:"Transport Ship",     faction:"earth", type:"support", hp:60,  en:40,  atk:10, def:15, mob:5, cost:120, tier:"A", slug:"transport-ship" },
+        { name:"Refueler",           faction:"earth", type:"support", hp:45,  en:60,  atk:5,  def:10, mob:4, cost:110, tier:"B", slug:"refueler" },
+        { name:"Scanning Drone",     faction:"earth", type:"support", hp:20,  en:30,  atk:0,  def:5,  mob:8, cost:70,  tier:"C", slug:"scanning-drone" },
+        { name:"R-100 Curtain Call", faction:"earth", type:"capital", hp:180, en:100, atk:65, def:60, mob:2, cost:600, tier:"S", slug:"r100-curtain-call" },
+        { name:"Battle Cruiser",     faction:"earth", type:"capital", hp:150, en:80,  atk:55, def:50, mob:2, cost:500, tier:"A", slug:"battle-cruiser" },
+        { name:"Missile Frigate",    faction:"earth", type:"capital", hp:120, en:70,  atk:70, def:35, mob:3, cost:400, tier:"B", slug:"missile-frigate" },
+        { name:"Bydo Alpha",         faction:"bydo", type:"fighter", hp:75,  en:55,  atk:50, def:25, mob:6, cost:200, tier:"A", slug:"bydo-alpha" },
+        { name:"Bydo Beta",          faction:"bydo", type:"fighter", hp:65,  en:65,  atk:45, def:20, mob:7, cost:210, tier:"B", slug:"bydo-beta" },
+        { name:"Bydo Gamma",         faction:"bydo", type:"fighter", hp:90,  en:50,  atk:60, def:30, mob:5, cost:280, tier:"A", slug:"bydo-gamma" },
+        { name:"Bydo Dobkeratops",   faction:"bydo", type:"bomber",  hp:130, en:40,  atk:95, def:45, mob:2, cost:450, tier:"S", slug:"bydo-dobkeratops" },
+        { name:"Bydo Meltcraft",     faction:"bydo", type:"bomber",  hp:100, en:45,  atk:80, def:35, mob:3, cost:380, tier:"A", slug:"bydo-meltcraft" },
+        { name:"Bydo Spore",         faction:"bydo", type:"support", hp:50,  en:50,  atk:15, def:15, mob:5, cost:130, tier:"B", slug:"bydo-spore" },
+        { name:"Bydo Hive",          faction:"bydo", type:"support", hp:70,  en:40,  atk:10, def:25, mob:3, cost:180, tier:"A", slug:"bydo-hive" },
+        { name:"Bydo Worm",          faction:"bydo", type:"capital", hp:200, en:80,  atk:60, def:55, mob:2, cost:650, tier:"S", slug:"bydo-worm" },
+        { name:"Bydo Mothership",    faction:"bydo", type:"capital", hp:250, en:100, atk:75, def:65, mob:1, cost:800, tier:"S", slug:"bydo-mothership" },
+    ];
+
+    let currentSort = { field: 'name', asc: true };
+    let activeFactionTab = 'all';
+
+    function tt(key) { return (window.__i18n && window.__i18n.t(key)) || key; }
+
+    function renderFilters() {
+        document.getElementById('filterBar').innerHTML = `
+            <input type="text" id="searchInput" data-i18n-placeholder="units.filter.search" placeholder="${tt('units.filter.search')}">
+            <select id="factionFilter"><option value="all">${tt('units.filter.faction')}</option><option value="earth">${tt('units.faction.earth')}</option><option value="bydo">${tt('units.faction.bydo')}</option></select>
+            <select id="typeFilter"><option value="all">${tt('units.filter.type')}</option><option value="fighter">${tt('units.type.fighter')}</option><option value="bomber">${tt('units.type.bomber')}</option><option value="support">${tt('units.type.support')}</option><option value="capital">${tt('units.type.capital')}</option></select>
+            <select id="tierFilter"><option value="all">${tt('units.filter.tier')}</option><option value="S">S Tier</option><option value="A">A Tier</option><option value="B">B Tier</option><option value="C">C Tier</option></select>
+        `;
+        document.getElementById('factionTabs').innerHTML = `
+            <button class="tab-btn active" data-faction="all">${tt('units.tab.all')}</button>
+            <button class="tab-btn" data-faction="earth">${tt('units.tab.earth')}</button>
+            <button class="tab-btn" data-faction="bydo">${tt('units.tab.bydo')}</button>
+        `;
+        document.getElementById('unitHead').innerHTML = `<tr>
+            <th data-sort="name">${tt('units.table.name')} <span class="sort-arrow">▲</span></th>
+            <th data-sort="faction">${tt('units.table.faction')}</th>
+            <th data-sort="type">${tt('units.table.type')}</th>
+            <th data-sort="hp">${tt('units.table.hp')}</th>
+            <th data-sort="en">${tt('units.table.en')}</th>
+            <th data-sort="atk">${tt('units.table.atk')}</th>
+            <th data-sort="def">${tt('units.table.def')}</th>
+            <th data-sort="mob">${tt('units.table.mob')}</th>
+            <th data-sort="cost">${tt('units.table.cost')}</th>
+            <th data-sort="tier">${tt('units.table.tier')}</th>
+        </tr>`;
+    }
+
+    function renderTable(filtered) {
+        const tbody = document.getElementById('unitBody');
+        const noRes = document.getElementById('noResults');
+        if (filtered.length === 0) {
+            tbody.innerHTML = '';
+            noRes.style.display = 'block';
+            return;
+        }
+        noRes.style.display = 'none';
+        tbody.innerHTML = filtered.map(u => {
+            const facLabel = u.faction === 'earth' ? tt('units.faction.earth') : tt('units.faction.bydo');
+            const typeLabel = tt('units.type.' + u.type) || u.type;
+            return `<tr>
+                <td class="unit-name"><a href="${u.slug}.html">${u.name}</a></td>
+                <td><span class="faction-tag ${u.faction}">${facLabel}</span></td>
+                <td style="text-transform:capitalize;">${typeLabel}</td>
+                <td class="stat-hp">${u.hp}</td><td class="stat-en">${u.en}</td><td class="stat-atk">${u.atk}</td>
+                <td class="stat-def">${u.def}</td><td class="stat-mob">${u.mob}</td><td>${u.cost}</td>
+                <td><span class="tier-badge tier-${u.tier.toLowerCase()}">${u.tier}</span></td>
+            </tr>`;
+        }).join('');
+    }
+
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const faction = document.getElementById('factionFilter').value;
+        const type = document.getElementById('typeFilter').value;
+        const tier = document.getElementById('tierFilter').value;
+        let filtered = units.filter(u => {
+            if (activeFactionTab !== 'all' && u.faction !== activeFactionTab) return false;
+            if (faction !== 'all' && u.faction !== faction) return false;
+            if (type !== 'all' && u.type !== type) return false;
+            if (tier !== 'all' && u.tier !== tier) return false;
+            if (search && !u.name.toLowerCase().includes(search)) return false;
+            return true;
+        });
+        const f = currentSort.field;
+        filtered.sort((a,b) => {
+            let va = a[f], vb = b[f];
+            if (typeof va === 'string') va = va.toLowerCase();
+            if (typeof vb === 'string') vb = vb.toLowerCase();
+            if (va < vb) return currentSort.asc ? -1 : 1;
+            if (va > vb) return currentSort.asc ? 1 : -1;
+            return 0;
+        });
+        renderTable(filtered);
+    }
+
+    function bindEvents() {
+        ['searchInput','factionFilter','typeFilter','tierFilter'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.addEventListener('input', applyFilters); el.addEventListener('change', applyFilters); }
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                activeFactionTab = this.dataset.faction;
+                const ff = document.getElementById('factionFilter');
+                if (ff) ff.value = activeFactionTab;
+                applyFilters();
+            });
+        });
+        document.querySelectorAll('#unitHead th[data-sort]').forEach(th => {
+            th.addEventListener('click', function() {
+                const field = this.dataset.sort;
+                if (currentSort.field === field) { currentSort.asc = !currentSort.asc; }
+                else { currentSort.field = field; currentSort.asc = true; }
+                document.querySelectorAll('.sort-arrow').forEach(a => a.textContent = '');
+                this.querySelector('.sort-arrow').textContent = currentSort.asc ? '▲' : '▼';
+                applyFilters();
+            });
+        });
+    }
+
+    function init() {
+        renderFilters();
+        renderTable(units);
+        bindEvents();
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('q')) {
+            const si = document.getElementById('searchInput');
+            if (si) { si.value = params.get('q'); applyFilters(); }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for i18n to initialize, then build UI
+        if (window.__i18n) {
+            init();
+        } else {
+            // i18n not loaded yet — listen for it
+            const check = setInterval(function() {
+                if (window.__i18n) { clearInterval(check); init(); }
+            }, 50);
+        }
+    });
+
+    // Rebuild UI on language change
+    document.documentElement.addEventListener('langchange', function() {
+        renderFilters();
+        renderTable(units);
+        bindEvents();
+        applyFilters();
+    });
+
+    document.getElementById('hamburger').addEventListener('click', () => {
+        document.getElementById('nav').classList.toggle('open');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="tips.title">Tips & Tricks — R-Type Tactics I • II Cosmos</title>
+    <meta name="description" content="Advanced tips for R-Type Tactics: fleet composition, hidden content, Cosmos-specific changes, and expert-level tactics to dominate every mission.">
+    <link rel="canonical" href="https://rtypetactics.guide/tips.html">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #141420; --border: #1e1e30;
+            --accent: #00aaff; --accent-warm: #ff6b35; --success: #00e676;
+            --danger: #ff1744; --text: #e0e0e0; --text-dim: #8892b0; --link: #58a6ff;
+            --max-read: 750px; --max-wide: 1100px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh;
+        }
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); padding: 0 1rem;
+        }
+        .header-inner {
+            max-width: var(--max-wide); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 0.5rem;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.1rem; font-weight: 700; color: #fff; text-decoration: none; white-space: nowrap; }
+        .logo span { color: var(--accent); }
+        .nav { display: flex; gap: 0.25rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
+        .nav a { color: var(--text-dim); text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.875rem; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+        .nav a:hover, .nav a.active { color: #fff; background: rgba(255,255,255,0.06); }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; }
+        .page { max-width: var(--max-wide); margin: 0 auto; padding: 0 1rem 3rem; display: grid; grid-template-columns: 1fr 300px; gap: 2rem; }
+        .content { min-width: 0; }
+        .sidebar { position: sticky; top: 72px; align-self: start; }
+        .article { max-width: var(--max-read); }
+        .article h1 { font-size: 2rem; font-weight: 800; margin: 2rem 0 0.5rem; }
+        .article h2 { font-size: 1.35rem; font-weight: 700; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+        .article h3 { font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--accent); }
+        .article p { margin-bottom: 1rem; }
+        .article ul, .article ol { margin: 0 0 1rem 1.5rem; }
+        .article li { margin-bottom: 0.4rem; }
+        .article a { color: var(--link); }
+        .tip-box {
+            background: rgba(0,170,255,0.08); border-left: 3px solid var(--accent);
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1.25rem 0;
+        }
+        .tip-box.warn { background: rgba(255,107,53,0.08); border-left-color: var(--accent-warm); }
+        .tip-box.good { background: rgba(0,230,118,0.08); border-left-color: var(--success); }
+        .tip-box strong { display: block; margin-bottom: 0.25rem; }
+        .tip-box p { margin: 0; font-size: 0.9rem; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); margin: 1.5rem 0 0; }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+        .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+        .sidebar-card h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.75rem; }
+        .sidebar-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .sidebar-card li a { color: var(--link); text-decoration: none; font-size: 0.875rem; }
+        .ad-slot { background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; min-height: 90px; margin-bottom: 1.25rem; }
+        .ad-slot.sidebar-ad { min-height: 250px; }
+        .footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.8rem; }
+        .footer a { color: var(--link); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .page { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .nav { display: none; }
+            .nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); border-bottom: 1px solid var(--border); padding: 0.5rem 1rem 1rem; }
+            .hamburger { display: block; }
+            .article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <a href="/" class="logo">R-Type<span>Tactics</span>.guide</a>
+            <div data-lang-switcher></div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <nav>
+            <ul class="nav" id="nav">
+                <li><a href="/beginner-guide.html" data-i18n="nav.beginner">Beginner's Guide</a></li>
+                <li><a href="/units/" data-i18n="nav.units">Units</a></li>
+                <li><a href="/walkthrough/" data-i18n="nav.walkthrough">Walkthrough</a></li>
+                <li><a href="/tips.html" class="active" data-i18n="nav.tips">Tips</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="page">
+    <main class="content">
+        <article class="article">
+            <nav class="breadcrumb"><a href="/" data-i18n="breadcrumb.home">Home</a> / <span data-i18n="breadcrumb.tips">Tips & Tricks</span></nav>
+            <h1 data-i18n="tips.title">Advanced Tips & Tricks</h1>
+            <p data-i18n="tips.intro">Once you've got the basics down, these techniques will elevate your game. Covers fleet composition theory, hidden secrets, Cosmos-specific changes, and combat tactics that the tutorial never mentions.</p>
+
+            <div class="ad-slot" data-i18n="ad.afterintro">Ad — After Intro</div>
+
+            <h2 id="fleet-building" data-i18n="tips.sec.fleet">Fleet Composition Theory</h2>
+
+            <h3>The "Tank-Spank-Crank" Framework</h3>
+            <p>Every effective fleet boils down to three roles. If your deployment covers all three, you'll handle most missions:</p>
+            <ul>
+                <li><strong>Tank</strong> (1-2 units) — High HP/DEF ships that absorb enemy fire. Position them forward. R-9B Strider, Battle Cruiser.</li>
+                <li><strong>Spank</strong> (2-3 units) — High ATK units that deal the actual damage. Position behind tanks. R-9A Arrowhead, R-9D Shooting Star.</li>
+                <li><strong>Crank</strong> (1 unit) — Support that keeps the machine running. Repair Unit, Refueler, Transport Ship. Your "crank" turns losses into wins.</li>
+            </ul>
+
+            <div class="tip-box good">
+                <strong>Pro Move: The 1.5× Rule</strong>
+                <p>For every 100 deployment points the mission gives you, bring 150 points worth of potential units. Swap between them based on the situation. Versatility beats brute force.</p>
+            </div>
+
+            <h3>Cost Efficiency: Not All 400-Cost Units Are Equal</h3>
+            <p>High-cost units are tempting, but two 200-cost fighters often outperform one 400-cost capital ship. Why? <strong>Action economy.</strong> Two units means two attacks per turn, two targets to split enemy fire, and redundancy if one goes down. Only bring a capital ship when the mission demands the raw durability.</p>
+
+            <h3>Faction-Specific Builds</h3>
+            <p><strong>Earth Force</strong> relies on balanced stats and versatility. Your strength is adaptability — you have a unit for every situation. Lean into this: bring diverse squadrons.</p>
+            <p><strong>Bydo Empire</strong> relies on regeneration and overwhelming pressure. Bydo units heal over time and can consume fallen enemies. Your game plan is to trade favorably, heal back up, and snowball. <em>Don't play Bydo like Earth.</em></p>
+
+            <h2 id="hidden" data-i18n="tips.sec.hidden">Hidden Content & Unlockables</h2>
+            <p>R-Type Tactics is packed with secrets. Here's what we've found (spoiler-light):</p>
+
+            <h3>RTT I Hidden Content</h3>
+            <ul>
+                <li><strong>Secret Unit: R-9Ø Ragnarok</strong> — S-rank every mission in the Earth campaign on Normal or higher. The best all-around fighter in the game.</li>
+                <li><strong>Hidden Mission: "The Forgotten Lab"</strong> — On Mission 7, don't destroy the side-structure in the northeast corner. Interact with it instead to unlock a bonus mission after the campaign.</li>
+                <li><strong>Alternate Ending</strong> — Complete the final mission with zero allied casualties and the R-9Ø in your fleet. Unlocks an extended epilogue.</li>
+                <li><strong>Sound Test</strong> — Beat the game once. Accessible from the main menu.</li>
+            </ul>
+
+            <h3>RTT II Hidden Content</h3>
+            <ul>
+                <li><strong>Bydo Campaign Unlock</strong> — Beat the Earth campaign. No shortcut — you have to earn it.</li>
+                <li><strong>Secret Unit: Bydo Mothership</strong> — In the Bydo campaign, achieve an S-rank on the final mission. Replay any mission with it in your fleet.</li>
+                <li><strong>Branching Path: Mission 6</strong> — In "Industrial Sabotage," destroying the optional reactor vs. capturing it splits the next two missions into completely different maps.</li>
+                <li><strong>All Unit Gallery</strong> — Unlock every unit in both campaigns once to access the gallery with concept art and developer notes.</li>
+                <li><strong>"True" Ending</strong> — S-rank all missions in both campaigns. Requires mastery of both factions.</li>
+            </ul>
+
+            <div class="tip-box warn">
+                <strong>Spoiler Note</strong>
+                <p>Some hidden content involves story revelations. If you care about the narrative, play through each campaign once blind, then come back for clean-up with this guide.</p>
+            </div>
+
+            <div class="ad-slot" data-i18n="ad.mid">Ad — Mid Content</div>
+
+            <h2 id="cosmos" data-i18n="tips.sec.cosmos">What's New in Cosmos</h2>
+            <p>The 2026 Cosmos release isn't just a remaster — it includes real gameplay changes. Here's what's different from the PSP originals:</p>
+
+            <h3>Gameplay Changes</h3>
+            <ul>
+                <li><strong>Rebalanced Unit Stats</strong> — Several underused units (Repair Unit, R-9F, Scanning Drone) received buffs. The R-9W Wise Man was slightly nerfed — it dominated the PSP meta.</li>
+                <li><strong>New Difficulty: "Cosmos Mode"</strong> — Harder than Hard. Enemy AI is smarter, uses flanking, and targets your support units first. For veterans only.</li>
+                <li><strong>Quality of Life</strong> — Turn undo (1 per turn), faster animations toggle, auto-save between missions, and a skippable tutorial.</li>
+                <li><strong>New Units</strong> — At least 3 new units were teased: the R-100 Curtain Call (Earth capital ship), Bydo Hive (support), and one unannounced secret.</li>
+                <li><strong>Online Multiplayer (NEW)</strong> — Both games now support 1v1 PvP battles. Build a fleet within a point limit and face off. No cross-play between platforms at launch.</li>
+            </ul>
+
+            <h3>Visual & Audio Upgrades</h3>
+            <ul>
+                <li>All sprites and models remade in HD (the PSP originals were pixel art).</li>
+                <li>New orchestral arrangements of the classic R-Type soundtrack — toggle between original and arranged in settings.</li>
+                <li>UI completely redesigned for 16:9 displays (originals were 4:3 PSP).</li>
+                <li>60 FPS on all platforms (Switch in docked mode; 30 FPS portable for battery).</li>
+            </ul>
+
+            <h3>Content Additions</h3>
+            <ul>
+                <li>New CG cutscenes replace the originals' still-image dialogue sequences.</li>
+                <li>Voice acting added (Japanese only; English subtitles).</li>
+                <li>Gallery mode with concept art, developer interviews, and a music player.</li>
+            </ul>
+
+            <h2 id="combat" data-i18n="tips.sec.combat">Advanced Combat Tactics</h2>
+
+            <h3>Flanking is Everything</h3>
+            <p>Frontal attacks deal standard damage. Side attacks deal ~1.5×. Rear attacks deal ~2.0×. <strong>One rear hit is worth two frontal hits.</strong> Always use your fastest unit to flank while your tank holds the enemy's attention from the front.</p>
+
+            <h3>Force Pod Micro-Management</h3>
+            <p>The Force pod isn't set-and-forget. A common pattern:</p>
+            <ol>
+                <li><strong>Approach:</strong> Force attached to front (blocks damage).</li>
+                <li><strong>Engage:</strong> Detach Force to attack independently while your ship fires from a different angle.</li>
+                <li><strong>Retreat:</strong> Reattach Force to rear to cover your escape.</li>
+            </ol>
+            <p>Advanced players detach the Force <em>before</em> moving into range — the Force acts independently during the turn, effectively giving you two attacks from one unit.</p>
+
+            <h3>EN Economy</h3>
+            <p>Don't fire every weapon every turn. If an enemy has 10 HP remaining, don't use your 60-damage heavy weapon — finish it with your secondary and save EN. <strong>Overkill is the number one reason new players run out of energy on turn 8.</strong></p>
+
+            <h3>Transport Ship Tech</h3>
+            <p>Loading a unit onto a Transport Ship doesn't just move it faster — it <em>protects it</em>. The Transport absorbs hits first. Use this to ferry a damaged unit to safety, or to deliver a bomber into the enemy backline unharmed. This is a top-tier tactic that the game never tells you about.</p>
+
+            <h3>Knowing When to Sacrifice</h3>
+            <p>Sometimes losing a unit is optimal. If a 70-cost fighter can trade for a 400-cost enemy capital ship or buy you two turns to complete an objective, it's worth it. <strong>Play the mission objective, not the kill count.</strong></p>
+
+            <div class="tip-box good">
+                <strong>PvP Mindset Shift</strong>
+                <p>In multiplayer, everything changes. Human opponents don't fall for AI patterns, they target your supports first, and they know how to flank. Your single-player fleet compositions will get destroyed online. Build for unpredictability.</p>
+            </div>
+
+        </article>
+
+        <div class="ad-slot" style="margin-top:2rem;" data-i18n="ad.below">Ad — Below Article</div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <h4 data-i18n="sidebar.sections">Article Sections</h4>
+            <ul>
+                <li><a href="#fleet-building" data-i18n="tips.sec.fleet">→ Fleet Composition</a></li>
+                <li><a href="#hidden" data-i18n="tips.sec.hidden">→ Hidden Content & Unlockables</a></li>
+                <li><a href="#cosmos" data-i18n="tips.sec.cosmos">→ What's New in Cosmos</a></li>
+                <li><a href="#combat" data-i18n="tips.sec.combat">→ Advanced Combat Tactics</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-card">
+            <h4 data-i18n="sidebar.related">Related</h4>
+            <ul>
+                <li><a href="/beginner-guide.html" data-i18n="sidebar.quick.beginner">→ Beginner's Guide</a></li>
+                <li><a href="/units/" data-i18n="sidebar.quick.units">→ All Units</a></li>
+                <li><a href="/walkthrough/" data-i18n="sidebar.quick.walkthrough">→ Mission Walkthrough</a></li>
+            </ul>
+        </div>
+        <div class="ad-slot sidebar-ad" data-i18n="ad.sidebar">Ad — Sidebar</div>
+    </aside>
+</div>
+
+<footer class="footer">
+    <p data-i18n="footer.copyright">R-Type Tactics I • II Cosmos is © Granzella Inc. / NIS America, Inc. Fan-made guide.</p>
+    <p style="margin-top:0.5rem"><a href="/" data-i18n="nav.home">Home</a> · <a href="mailto:hello@rtypetactics.guide" data-i18n="footer.contact">Contact</a></p>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script>
+    document.getElementById('hamburger').addEventListener('click', () => { document.getElementById('nav').classList.toggle('open'); });
+</script>
+</body>
+</html>

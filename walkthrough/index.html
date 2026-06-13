@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="walkthrough.title">Mission Walkthrough — R-Type Tactics I • II Cosmos</title>
+    <meta name="description" content="Complete mission walkthroughs for R-Type Tactics I & II. Objective guides, enemy intel, recommended fleet loadouts, and S-rank tips for every mission.">
+    <link rel="canonical" href="https://rtypetactics.guide/walkthrough/">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #141420; --border: #1e1e30;
+            --accent: #00aaff; --accent-warm: #ff6b35; --success: #00e676;
+            --danger: #ff1744; --text: #e0e0e0; --text-dim: #8892b0; --link: #58a6ff;
+            --max-read: 750px; --max-wide: 1100px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh;
+        }
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,10,15,0.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); padding: 0 1rem;
+        }
+        .header-inner {
+            max-width: var(--max-wide); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 0.5rem;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo { font-size: 1.1rem; font-weight: 700; color: #fff; text-decoration: none; white-space: nowrap; }
+        .logo span { color: var(--accent); }
+        .nav { display: flex; gap: 0.25rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
+        .nav a { color: var(--text-dim); text-decoration: none; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.875rem; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+        .nav a:hover, .nav a.active { color: #fff; background: rgba(255,255,255,0.06); }
+        .hamburger { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; }
+        .page { max-width: var(--max-wide); margin: 0 auto; padding: 0 1rem 3rem; }
+        h1 { font-size: 2rem; font-weight: 800; margin: 2rem 0 0.25rem; }
+        h2 { font-size: 1.4rem; font-weight: 700; margin: 2rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+        .lead { color: var(--text-dim); max-width: 600px; margin-bottom: 1rem; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); margin: 1.5rem 0 0; }
+        .breadcrumb a { color: var(--link); text-decoration: none; }
+
+        .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); }
+        .tab-btn {
+            padding: 0.6rem 1.5rem; border: none; background: none; color: var(--text-dim);
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; position: relative; bottom: -2px;
+            border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn:hover { color: #fff; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .mission-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+            padding: 1.25rem; margin-bottom: 0.75rem; transition: border-color 0.15s;
+            display: grid; grid-template-columns: 50px 1fr 100px; gap: 1rem; align-items: center;
+        }
+        .mission-card:hover { border-color: var(--accent); }
+        .mission-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); text-align: center; }
+        .mission-num.bydo { color: var(--accent-warm); }
+        .mission-info h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.15rem; }
+        .mission-info h3 a { color: #fff; text-decoration: none; }
+        .mission-info h3 a:hover { color: var(--accent); }
+        .mission-info .meta { font-size: 0.75rem; color: var(--text-dim); }
+        .diff-badge {
+            justify-self: center; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.65rem;
+            border-radius: 999px; text-transform: uppercase;
+        }
+        .diff-easy { background: rgba(0,230,118,0.15); color: var(--success); }
+        .diff-medium { background: rgba(255,215,0,0.15); color: #ffd700; }
+        .diff-hard { background: rgba(255,23,68,0.15); color: var(--danger); }
+        .diff-boss { background: rgba(255,107,53,0.15); color: var(--accent-warm); }
+
+        .ad-slot { background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; min-height: 90px; margin: 2rem 0; }
+        .footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.8rem; }
+        .footer a { color: var(--link); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.98); border-bottom: 1px solid var(--border); padding: 0.5rem 1rem 1rem; }
+            .hamburger { display: block; }
+            .mission-card { grid-template-columns: 40px 1fr 80px; gap: 0.5rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <a href="/" class="logo">R-Type<span>Tactics</span>.guide</a>
+            <div data-lang-switcher></div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <nav>
+            <ul class="nav" id="nav">
+                <li><a href="/beginner-guide.html" data-i18n="nav.beginner">Beginner's Guide</a></li>
+                <li><a href="/units/" data-i18n="nav.units">Units</a></li>
+                <li><a href="/walkthrough/" class="active" data-i18n="nav.walkthrough">Walkthrough</a></li>
+                <li><a href="/tips.html" data-i18n="nav.tips">Tips</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="page">
+    <nav class="breadcrumb"><a href="/" data-i18n="breadcrumb.home">Home</a> / <span data-i18n="breadcrumb.walkthrough">Walkthrough</span></nav>
+    <h1 data-i18n="walkthrough.title">Mission Walkthrough</h1>
+    <p class="lead" data-i18n="walkthrough.lead">Complete mission-by-mission guides for both campaigns. Each guide includes objectives, enemy intel, recommended fleet loadout, and tips for earning S-rank.</p>
+
+    <div class="tabs" id="walkthroughTabs"><!-- JS-rendered --></div>
+    <div class="ad-slot" data-i18n="ad.beforelist">Ad — Before Mission List</div>
+
+    <div class="tab-content active" id="tab-all"><h2 data-i18n="walkthrough.h2.all">All Missions</h2><div id="allMissions"></div></div>
+    <div class="tab-content" id="tab-rt1"><h2 data-i18n="walkthrough.h2.rt1">R-Type Tactics I — Earth Force Campaign</h2><p class="lead">The original campaign. Play as Earth forces defending against the Bydo invasion. 12 missions.</p><div id="rt1Missions"></div></div>
+    <div class="tab-content" id="tab-rt2-earth"><h2 data-i18n="walkthrough.h2.rt2e">R-Type Tactics II — Earth Force Campaign</h2><p class="lead">Continue the fight. More complex missions with branching objectives and new units. 14 missions.</p><div id="rt2EarthMissions"></div></div>
+    <div class="tab-content" id="tab-rt2-bydo"><h2 data-i18n="walkthrough.h2.rt2b">R-Type Tactics II — Bydo Empire Campaign</h2><p class="lead">Play as the alien threat. Completely different unit roster, asymmetrical objectives, and a unique perspective on the war. 12 missions.</p><div id="rt2BydoMissions"></div></div>
+
+    <div class="ad-slot" data-i18n="ad.belowlist">Ad — Below Mission List</div>
+</div>
+
+<footer class="footer">
+    <p data-i18n="footer.copyright">R-Type Tactics I • II Cosmos is © Granzella Inc. / NIS America, Inc. Fan-made guide.</p>
+    <p style="margin-top:0.5rem"><a href="/" data-i18n="nav.home">Home</a> · <a href="mailto:hello@rtypetactics.guide" data-i18n="footer.contact">Contact</a></p>
+</footer>
+
+<script src="/js/i18n.js"></script>
+<script>
+    const missions = [
+        { id:"rt1-m01", game:"rt1", faction:"earth", num:1,  title:"First Contact",          diff:"easy",   desc:"Tutorial mission. Engage Bydo scout forces. Learn basic controls and combat." },
+        { id:"rt1-m02", game:"rt1", faction:"earth", num:2,  title:"Asteroid Field",         diff:"easy",   desc:"Navigate hazardous asteroid terrain while intercepting Bydo patrols." },
+        { id:"rt1-m03", game:"rt1", faction:"earth", num:3,  title:"Defense Line",           diff:"medium", desc:"Hold the defensive perimeter. Protect allied base from waves of Bydo attackers." },
+        { id:"rt1-m04", game:"rt1", faction:"earth", num:4,  title:"Carrier Strike",         diff:"boss",   desc:"First boss mission. Destroy the Bydo carrier warship — multiple target sections." },
+        { id:"rt1-m05", game:"rt1", faction:"earth", num:5,  title:"Behind Enemy Lines",     diff:"medium", desc:"Scout behind Bydo lines. Fog of war active. Find and destroy hidden supply depots." },
+        { id:"rt1-m06", game:"rt1", faction:"earth", num:6,  title:"Orbital Assault",        diff:"hard",   desc:"Space-based mission. Low-gravity movement. Defend satellite array from Bydo bombers." },
+        { id:"rt1-m07", game:"rt1", faction:"earth", num:7,  title:"The Bydo Hive",          diff:"hard",   desc:"Infiltrate a Bydo bio-station. Tight corridors, ambushes, and new enemy types." },
+        { id:"rt1-m08", game:"rt1", faction:"earth", num:8,  title:"Counter-Offensive",      diff:"medium", desc:"Push the Bydo back. Large-scale battle with allied AI-controlled support units." },
+        { id:"rt1-m09", game:"rt1", faction:"earth", num:9,  title:"Space Fortress",         diff:"boss",   desc:"Second boss. Bydo space fortress with multiple defense layers and turret arrays." },
+        { id:"rt1-m10", game:"rt1", faction:"earth", num:10, title:"The Singularity",        diff:"hard",   desc:"Escort a science vessel through Bydo territory. Protect it at all costs." },
+        { id:"rt1-m11", game:"rt1", faction:"earth", num:11, title:"Bydo Core — Outer Ring", diff:"hard",   desc:"Penultimate mission. Breach the outer defenses of the Bydo home dimension." },
+        { id:"rt1-m12", game:"rt1", faction:"earth", num:12, title:"Bydo Core — Final Stand",diff:"boss",   desc:"Final boss: the Bydo Core itself. Multi-phase battle. Bring your best fleet." },
+        { id:"rt2e-m01", game:"rt2", faction:"earth", num:1,  title:"Return to Service",     diff:"easy",   desc:"Training exercise that turns real. Re-familiarize with RTT II's new mechanics." },
+        { id:"rt2e-m02", game:"rt2", faction:"earth", num:2,  title:"Border Skirmish",       diff:"easy",   desc:"Intercept Bydo raiders at the edge of Earth space. Introduces new bomber unit." },
+        { id:"rt2e-m03", game:"rt2", faction:"earth", num:3,  title:"Rescue Operation",      diff:"medium", desc:"Extract a stranded recon team. Time-limited mission with hostage mechanics." },
+        { id:"rt2e-m04", game:"rt2", faction:"earth", num:4,  title:"Planetfall",            diff:"medium", desc:"First ground/atmosphere hybrid mission. Different terrain physics." },
+        { id:"rt2e-m05", game:"rt2", faction:"earth", num:5,  title:"Nebula Blind",          diff:"hard",   desc:"Combat inside a sensor-scrambling nebula. Visual range severely limited." },
+        { id:"rt2e-m06", game:"rt2", faction:"earth", num:6,  title:"Industrial Sabotage",   diff:"medium", desc:"Infiltrate and destroy a Bydo shipyard. Optional objectives unlock bonus units." },
+        { id:"rt2e-m07", game:"rt2", faction:"earth", num:7,  title:"Ambush at Ceres",       diff:"hard",   desc:"Enemy reinforces every 3 turns. Set up kill zones before you're overwhelmed." },
+        { id:"rt2e-m08", game:"rt2", faction:"earth", num:8,  title:"The Gauntlet",          diff:"boss",   desc:"Boss rush. Face three mini-bosses in sequence with limited resupply between." },
+        { id:"rt2e-m09", game:"rt2", faction:"earth", num:9,  title:"Ally of Convenience",   diff:"medium", desc:"Fight alongside a neutral faction. Don't hit your temporary allies." },
+        { id:"rt2e-m10", game:"rt2", faction:"earth", num:10, title:"Deep Strike",           diff:"hard",   desc:"Long-range penetration mission. Fuel management is the real enemy here." },
+        { id:"rt2e-m11", game:"rt2", faction:"earth", num:11, title:"Dimensional Breach",    diff:"hard",   desc:"Cross into Bydo space. Physics change. Enemy properties change mid-mission." },
+        { id:"rt2e-m12", game:"rt2", faction:"earth", num:12, title:"Operation Bitter Chocolate", diff:"boss", desc:"Named operation. Full-scale fleet battle with a boss at the climax." },
+        { id:"rt2e-m13", game:"rt2", faction:"earth", num:13, title:"Into the Abyss",        diff:"hard",   desc:"Descent into the Bydo dimensional core. Environmental hazards." },
+        { id:"rt2e-m14", game:"rt2", faction:"earth", num:14, title:"Final Liberation",      diff:"boss",   desc:"Final Earth campaign boss. All-or-nothing battle. Every unit counts." },
+        { id:"rt2b-m01", game:"rt2", faction:"bydo", num:1,  title:"Awakening",              diff:"easy",   desc:"Control your first Bydo organisms. Learn asymmetrical Bydo mechanics." },
+        { id:"rt2b-m02", game:"rt2", faction:"bydo", num:2,  title:"Infection Vector",       diff:"easy",   desc:"Spread Bydo corruption. Convert enemy units to your side." },
+        { id:"rt2b-m03", game:"rt2", faction:"bydo", num:3,  title:"Harvest",                diff:"medium", desc:"Collect biomass from civilian targets. Morally dark — Bydo perspective." },
+        { id:"rt2b-m04", game:"rt2", faction:"bydo", num:4,  title:"Break the Line",         diff:"medium", desc:"Overwhelm Earth defense fleet. Wave-based attacks with regenerating units." },
+        { id:"rt2b-m05", game:"rt2", faction:"bydo", num:5,  title:"Evolution Chamber",      diff:"medium", desc:"Upgrade your Bydo units mid-mission by consuming fallen enemies." },
+        { id:"rt2b-m06", game:"rt2", faction:"bydo", num:6,  title:"Terror from Beyond",     diff:"hard",   desc:"Psychological warfare mission. Earth units have reduced morale/accuracy." },
+        { id:"rt2b-m07", game:"rt2", faction:"bydo", num:7,  title:"Consume the Fleet",      diff:"hard",   desc:"Take down an Earth capital ship fleet. Use hit-and-run with organic units." },
+        { id:"rt2b-m08", game:"rt2", faction:"bydo", num:8,  title:"Earthfall",              diff:"boss",   desc:"Invasion of Earth. Boss fight against planetary defense grid." },
+        { id:"rt2b-m09", game:"rt2", faction:"bydo", num:9,  title:"Corruption Spreads",     diff:"medium", desc:"Terraforming mission. Spread Bydo ecology across Earth's surface." },
+        { id:"rt2b-m10", game:"rt2", faction:"bydo", num:10, title:"Humanity's Last Stand",  diff:"hard",   desc:"Face Earth's ultimate weapons. Prototype R-series fighters deployed." },
+        { id:"rt2b-m11", game:"rt2", faction:"bydo", num:11, title:"Dimensional Victory",    diff:"hard",   desc:"Open a permanent portal. Defend the rift against desperate Earth assault." },
+        { id:"rt2b-m12", game:"rt2", faction:"bydo", num:12, title:"Total Assimilation",     diff:"boss",   desc:"Final Bydo mission. Consume Earth's last resistance. Secret ending conditions." },
+    ];
+
+    function tt(key) { return (window.__i18n && window.__i18n.t(key)) || key; }
+
+    function diffBadge(d) {
+        const label = tt('walkthrough.diff.' + d) || d;
+        return `<span class="diff-badge diff-${d}">${label}</span>`;
+    }
+
+    function renderMissions(list, containerId) {
+        document.getElementById(containerId).innerHTML = list.map(m => `
+            <div class="mission-card">
+                <div class="mission-num ${m.faction === 'bydo' ? 'bydo' : ''}">${String(m.num).padStart(2,'0')}</div>
+                <div class="mission-info">
+                    <h3><a href="${m.id}.html">${m.title}</a></h3>
+                    <span class="meta">${m.desc}</span>
+                </div>
+                ${diffBadge(m.diff)}
+            </div>
+        `).join('');
+    }
+
+    function renderAll() {
+        document.getElementById('walkthroughTabs').innerHTML = `
+            <button class="tab-btn active" data-tab="tab-all">${tt('walkthrough.tab.all')}</button>
+            <button class="tab-btn" data-tab="tab-rt1">${tt('walkthrough.tab.rt1')}</button>
+            <button class="tab-btn" data-tab="tab-rt2-earth">${tt('walkthrough.tab.rt2e')}</button>
+            <button class="tab-btn" data-tab="tab-rt2-bydo">${tt('walkthrough.tab.rt2b')}</button>
+        `;
+        renderMissions(missions, 'allMissions');
+        renderMissions(missions.filter(m => m.game === 'rt1'), 'rt1Missions');
+        renderMissions(missions.filter(m => m.game === 'rt2' && m.faction === 'earth'), 'rt2EarthMissions');
+        renderMissions(missions.filter(m => m.game === 'rt2' && m.faction === 'bydo'), 'rt2BydoMissions');
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+    }
+
+    function init() {
+        renderAll();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.__i18n) { init(); }
+        else { const check = setInterval(function() { if (window.__i18n) { clearInterval(check); init(); } }, 50); }
+    });
+
+    document.documentElement.addEventListener('langchange', function() { renderAll(); });
+
+    document.getElementById('hamburger').addEventListener('click', () => {
+        document.getElementById('nav').classList.toggle('open');
+    });
+</script>
+</body>
+</html>
