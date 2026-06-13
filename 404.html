@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found | R-Type Tactics Guide</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #141420; --border: #1e1e30;
+            --accent: #00aaff; --accent-warm: #ff6b35; --text: #e0e0e0; --text-dim: #8892b0; --link: #58a6ff;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text); min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 2rem;
+        }
+        .code {
+            font-size: clamp(5rem, 15vw, 10rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+        p { color: var(--text-dim); max-width: 400px; margin-bottom: 2rem; line-height: 1.6; }
+        a {
+            display: inline-block; padding: 0.75rem 1.5rem; border-radius: 8px;
+            background: var(--accent); color: #fff; text-decoration: none; font-weight: 600;
+            transition: opacity 0.15s;
+        }
+        a:hover { opacity: 0.85; }
+        .links { margin-top: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .links a { background: var(--surface); border: 1px solid var(--border); color: var(--link); font-weight: 400; }
+    </style>
+</head>
+<body>
+    <div class="code">404</div>
+    <h1>Lost in Space</h1>
+    <p>This page has drifted into a Bydo dimension. It doesn't exist — or never did.</p>
+    <a href="/">Back to Home</a>
+    <div class="links">
+        <a href="/beginner-guide.html">Beginner's Guide</a>
+        <a href="/units/">Unit Database</a>
+        <a href="/walkthrough/">Walkthrough</a>
+    </div>
+</body>
+</html>
