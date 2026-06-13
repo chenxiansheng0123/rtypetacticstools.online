@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="index.hero.title">R-Type Tactics I • II Cosmos Guide — Tips, Units & Walkthrough</title>
+    <meta name="description" content="The complete guide for R-Type Tactics I • II Cosmos. Unit database, beginner tips, mission walkthroughs, and fleet-building advice.">
+    <link rel="canonical" href="https://rtypetactics.guide/">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #141420;
+            --border: #1e1e30;
+            --accent: #00aaff;
+            --accent-warm: #ff6b35;
+            --success: #00e676;
+            --danger: #ff1744;
+            --text: #e0e0e0;
+            --text-dim: #8892b0;
+            --link: #58a6ff;
+            --max-read: 750px;
+            --max-wide: 1100px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,10,15,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+        }
+
+        .header-inner {
+            max-width: var(--max-wide);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            gap: 0.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.25rem;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: color 0.15s, background 0.15s;
+            white-space: nowrap;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .hero {
+            max-width: var(--max-wide);
+            margin: 0 auto;
+            padding: 3rem 1rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero .subtitle {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            max-width: 560px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .badge.hot {
+            background: var(--accent-warm);
+            border-color: var(--accent-warm);
+            color: #fff;
+        }
+
+        .countdown {
+            font-size: 2rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .countdown-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .page {
+            max-width: var(--max-wide);
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .content {
+            min-width: 0;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 72px;
+            align-self: start;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: border-color 0.15s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .card h3 a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .card h3 a:hover {
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            flex: 1;
+        }
+
+        .card .tag {
+            align-self: flex-start;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(0,170,255,0.12);
+            color: var(--accent);
+        }
+
+        .card .tag.warm {
+            background: rgba(255,107,53,0.12);
+            color: var(--accent-warm);
+        }
+
+        .sidebar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .sidebar-card h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-card li a {
+            color: var(--link);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-card li a:hover {
+            text-decoration: underline;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: #fff;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .ad-slot {
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            min-height: 90px;
+            margin-bottom: 1.25rem;
+        }
+
+        .ad-slot.sidebar-ad {
+            min-height: 250px;
+        }
+
+        .ad-slot.inline-ad {
+            min-height: 90px;
+            margin: 2rem 0;
+        }
+
+        .platform-strip {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .platform-icon {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        .footer {
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: var(--link);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .nav.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: rgba(10,10,15,0.98);
+                border-bottom: 1px solid var(--border);
+                padding: 0.5rem 1rem 1rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero {
+                padding: 2rem 1rem 1.5rem;
+            }
+
+            .countdown {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <a href="/" class="logo">R-Type<span>Tactics</span>.guide</a>
+            <div data-lang-switcher></div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <nav>
+            <ul class="nav" id="nav">
+                <li><a href="beginner-guide.html" data-i18n="nav.beginner">Beginner's Guide</a></li>
+                <li><a href="units/" data-i18n="nav.units">Units</a></li>
+                <li><a href="walkthrough/" data-i18n="nav.walkthrough">Walkthrough</a></li>
+                <li><a href="tips.html" data-i18n="nav.tips">Tips</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+    <h1 data-i18n data-i18n-html="true">R-Type Tactics <em>I · II Cosmos</em> Guide</h1>
+    <p class="subtitle" data-i18n="index.hero.subtitle">
+        The complete player-made guide covering beginner tips, unit stats, mission walkthroughs, and fleet-building advice for the ultimate turn-based sci-fi strategy collection.
+    </p>
+
+    <div class="badge-row">
+        <span class="badge hot" data-i18n="index.badge.release">Releases Jun 18, 2026</span>
+        <span class="badge" data-i18n="index.badge.genre">Turn-Based Strategy</span>
+        <span class="badge">Granzella</span>
+        <span class="badge">NIS America</span>
+    </div>
+
+    <div class="countdown">
+        <span class="countdown-label" data-i18n="index.countdown.label">Launch in</span>
+        <span id="countdown">--</span>
+    </div>
+
+    <div class="platform-strip">
+        <span class="platform-icon">Switch / Switch 2</span>
+        <span class="platform-icon">PlayStation 5</span>
+        <span class="platform-icon">PlayStation 4</span>
+        <span class="platform-icon">Xbox Series X|S</span>
+        <span class="platform-icon">Steam</span>
+        <span class="platform-icon">Epic Games</span>
+    </div>
+</section>
+
+<!-- ═══════════ MAIN + SIDEBAR ═══════════ -->
+<div class="page">
+
+    <!-- ── MAIN ── -->
+    <main class="content">
+
+        <div class="ad-slot inline-ad" data-i18n="ad.afterhero">Ad — After Hero</div>
+
+        <h2 class="section-title" data-i18n="index.sec.getting">Getting Started</h2>
+        <div class="card-grid">
+            <div class="card">
+                <span class="tag" data-i18n="tag.mustread">Must Read</span>
+                <h3><a href="beginner-guide.html" data-i18n="index.card.beginner.title">Absolute Beginner's Guide</a></h3>
+                <p data-i18n="index.card.beginner.desc">New to R-Type Tactics? Learn the basics: movement, combat phases, resource management, and your first fleet setup.</p>
+            </div>
+            <div class="card">
+                <span class="tag warm" data-i18n="tag.popular">Popular</span>
+                <h3><a href="units/" data-i18n="index.card.bestunits.title">Best Units for Beginners</a></h3>
+                <p data-i18n="index.card.bestunits.desc">Which ships and support units to prioritize when starting out. Avoid wasting resources on trap picks.</p>
+            </div>
+            <div class="card">
+                <span class="tag" data-i18n="tag.essentials">Essentials</span>
+                <h3><a href="tips.html" data-i18n="index.card.controls.title">Controls & UI Translation</a></h3>
+                <p data-i18n="index.card.controls.desc">Japanese-to-English menu translations and keybindings explained. Never get lost in a sub-menu again.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title" data-i18n="index.sec.units">Unit Database</h2>
+        <div class="card-grid">
+            <div class="card">
+                <span class="tag" data-i18n="tag.earth">Earth</span>
+                <h3><a href="units/" data-i18n="index.card.earth.title">Earth Force Units</a></h3>
+                <p data-i18n="index.card.earth.desc">All R-series fighters, support craft, and capital ships. Stats, costs, upgrade paths, and deployment tips.</p>
+            </div>
+            <div class="card">
+                <span class="tag warm" data-i18n="tag.bydo">Bydo</span>
+                <h3><a href="units/" data-i18n="index.card.bydo.title">Bydo Empire Units</a></h3>
+                <p data-i18n="index.card.bydo.desc">Play as the other side. Bydo organic-mechanical hybrids with unique abilities and asymmetrical playstyle.</p>
+            </div>
+            <div class="card">
+                <span class="tag" data-i18n="tag.tool">Tool</span>
+                <h3><a href="units/" data-i18n="index.card.compare.title">Unit Comparison Tool</a></h3>
+                <p data-i18n="index.card.compare.desc">Filter, sort, and compare unit stats side-by-side. Find the best ship for any tactical situation.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title" data-i18n="index.sec.walkthrough">Mission Walkthroughs</h2>
+        <div class="card-grid">
+            <div class="card">
+                <span class="tag">RTT I</span>
+                <h3><a href="walkthrough/" data-i18n="index.card.rt1.title">R-Type Tactics I — Full Walkthrough</a></h3>
+                <p data-i18n="index.card.rt1.desc">Every mission covered: objectives, enemy composition, recommended fleet loadout, and S-rank tips.</p>
+            </div>
+            <div class="card">
+                <span class="tag warm">RTT II</span>
+                <h3><a href="walkthrough/" data-i18n="index.card.rt2.title">R-Type Tactics II — Full Walkthrough</a></h3>
+                <p data-i18n="index.card.rt2.desc">Operation Bitter Chocolate campaign guide. Branching paths, hidden missions, and secret unit unlocks.</p>
+            </div>
+        </div>
+
+        <div class="ad-slot inline-ad" data-i18n="ad.mid">Ad — Mid Content</div>
+
+        <h2 class="section-title" data-i18n="index.sec.advanced">Advanced Tips</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3><a href="tips.html" data-i18n="index.card.fleet.title">Fleet Composition 101</a></h3>
+                <p data-i18n="index.card.fleet.desc">How to balance fighters, bombers, and support. Fleet cost caps explained, and why synergy beats raw stats.</p>
+            </div>
+            <div class="card">
+                <h3><a href="tips.html" data-i18n="index.card.hidden.title">Hidden Content & Unlockables</a></h3>
+                <p data-i18n="index.card.hidden.desc">Every secret unit, hidden mission, and unlock condition we've found so far. Spoilers clearly marked.</p>
+            </div>
+            <div class="card">
+                <h3><a href="tips.html" data-i18n="index.card.cosmos.title">What's New in Cosmos</a></h3>
+                <p data-i18n="index.card.cosmos.desc">All changes from the original PSP releases: rebalanced units, new content, QoL improvements, and more.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+
+        <div class="sidebar-card">
+            <h4 data-i18n="sidebar.search">Search</h4>
+            <input type="search" class="search-input" data-i18n-placeholder="sidebar.search.placeholder" placeholder="Unit name, mission…" id="search">
+        </div>
+
+        <div class="ad-slot sidebar-ad" data-i18n="ad.sidebar">Ad — Sidebar Top</div>
+
+        <div class="sidebar-card">
+            <h4 data-i18n="sidebar.quicklinks">Quick Links</h4>
+            <ul>
+                <li><a href="beginner-guide.html" data-i18n="sidebar.quick.beginner">→ Beginner's Guide</a></li>
+                <li><a href="units/" data-i18n="sidebar.quick.units">→ All Units</a></li>
+                <li><a href="walkthrough/" data-i18n="sidebar.quick.walkthrough">→ Mission Index</a></li>
+                <li><a href="tips.html" data-i18n="sidebar.quick.tips">→ Tips & Tricks</a></li>
+                <li><a href="https://store.steampowered.com/app/" target="_blank" rel="nofollow noopener" data-i18n="sidebar.quick.steam">→ Buy on Steam</a></li>
+            </ul>
+        </div>
+
+    </aside>
+
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+    <p data-i18n="footer.copyright">
+        R-Type Tactics I • II Cosmos is © Granzella Inc. / NIS America, Inc.
+        This is a fan-made guide — not affiliated with the developers or publishers.
+    </p>
+    <p style="margin-top:0.5rem">
+        <a href="mailto:hello@rtypetactics.guide" data-i18n="footer.contact">Contact</a>
+        ·
+        <a href="/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+    </p>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script>
+    const btn = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+    btn.addEventListener('click', () => { nav.classList.toggle('open'); });
+
+    const launch = new Date('2026-06-18T00:00:00Z').getTime();
+    const el = document.getElementById('countdown');
+
+    function tick() {
+        const now = Date.now();
+        const diff = launch - now;
+        if (diff <= 0) {
+            el.textContent = (window.__i18n && window.__i18n.t('index.countdown.out')) || 'OUT NOW!';
+            return;
+        }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = `${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    document.getElementById('search').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+            window.location.href = '/units/?q=' + encodeURIComponent(this.value.trim());
+        }
+    });
+
+    // Re-translate "OUT NOW!" on lang change
+    document.documentElement.addEventListener('langchange', tick);
+</script>
+</body>
+</html>
